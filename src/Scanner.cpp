@@ -7,7 +7,7 @@ Scanner::Scanner(std::vector<char> characters) {
 }
 
 void Scanner::scan() {
-	for each (char c in chars) {
+	for (char c : chars) {
 		std::cout << c;
 	}
 
