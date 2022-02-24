@@ -3,8 +3,8 @@ Mini-PL interpreter
 
 Building the CMake project:
 ```
-mkdir build
-~/package $ cd build
+mkdir out
+~/package $ cd out
 ~/package/build $ cmake ..
 ~/package/build $ make
 ```
