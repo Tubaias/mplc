@@ -3,8 +3,8 @@ Mini-PL interpreter
 
 Building the CMake project:
 ```
-mkdir out
-cd out
-cmake ..
-make
+~/mplc$ mkdir out
+~/mplc$ cd out
+~/mplc/out$ cmake ..
+~/mplc/out$ make
 ```
