@@ -18,9 +18,17 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
+	// ------------------------------------------
+	for (char c : chars) {
+		std::cout << c;
+	}
+
+	std::cout << std::endl;
+	// ------------------------------------------
+
 	// scanning
 	Scanner scanner(chars);
-	scanner.scan();
+	scanner.scanToken();
 
 	return 0;
 }
