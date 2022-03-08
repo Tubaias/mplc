@@ -18,17 +18,17 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	// ------------------------------------------
+	// ------ PRINTING ----------------------
 	for (char c : chars) {
 		std::cout << c;
 	}
 
-	std::cout << std::endl;
-	// ------------------------------------------
+	std::cout << "\n\n----------\n" << std::endl;
+	// ------ PRINTING ----------------------
 
-	// scanning
-	Scanner scanner(chars);
-	scanner.scanToken();
+	// scanning and parsing
+	Parser parser(chars);
+	parser.parse();
 
 	return 0;
 }

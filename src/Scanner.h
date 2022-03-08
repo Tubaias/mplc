@@ -1,7 +1,8 @@
 #pragma once
 
 #include <vector>
-#include<iterator>
+#include <iterator>
+#include <set>
 #include "Token.h"
 
 class Scanner {
@@ -10,6 +11,8 @@ class Scanner {
 		Token scanToken();
 
 	private:
+		std::set<std::string> keywords;
 		std::vector<char> chars;
-		std::vector<char>::iterator it;
+		std::vector<char>::iterator it;	
+		char nextChar();
 };
