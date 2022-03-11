@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 
 	// scanning and parsing
 	Parser parser(chars);
-	//parser.printTokens();
+	parser.printTokens();
 	ASTnode ast = parser.parse();
 
 	printAST(ast); // EXTRA

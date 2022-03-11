@@ -14,7 +14,8 @@ class Scanner {
 	private:
 		std::set<std::string> keywords;
 		std::vector<char> chars;
-		std::vector<char>::iterator it;	
+		std::vector<char>::iterator it;
+		void stepBack();
 		int line;
 		char nextChar();
 };

@@ -115,9 +115,10 @@ bool Parser::match(std::vector<std::string> types) {
 	std::string expectation = "";
 	for (std::string type : types) {
 		expectation += type;
-		expectation += ", ";
+		expectation += "/";
 	}
 
+	expectation.pop_back();
 	error(next, expectation);
 	return false;
 }
@@ -130,8 +131,10 @@ bool Parser::match(std::vector<std::string> types) {
 		| "read" <ident>
 		| "print" <expr>
 		| "assert" "(" <expr> ")"
-<expr> ::= <opnd> <op> <opnd>
-		| [ <unary_op> ] <opnd>
+<expr> ::= <bin_expr>
+		| <un_expr>
+<bin_expr> ::= <opnd> <op> <opnd>
+<un_expr> ::= [ <unary_op> ] <opnd>
 <opnd> ::= <int>
 		| <string>
 		| "true"

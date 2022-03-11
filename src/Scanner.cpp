@@ -6,11 +6,17 @@ Scanner::Scanner(std::vector<char> characters) {
 	keywords = {"var", "for", "end", "in", "do", "read", "print", "int", "string", "bool", "assert", "true", "false"};
 	chars = characters;
 	it = chars.begin();
-	line = 0;
+	line = 1;
 }
 
 void Scanner::reset() {
 	it = chars.begin();
+	line = 1;
+}
+
+void Scanner::stepBack() {
+	it--;
+	if (*it == 10 /* line feed */) line--;
 }
 
 char Scanner::nextChar() {
@@ -88,6 +94,7 @@ Token Scanner::scanToken() {
 			if (c == '=') {
 				t.type = "assign"; t.line = line; return t;
 			} else {
+				stepBack();
 				t.type = "col"; t.line = line; return t;
 			}
 		// forward slash
@@ -112,7 +119,7 @@ Token Scanner::scanToken() {
 				while (true) {
 					c = nextChar();
 					if (c == 0) {
-						t.type = "END"; t.line = line; return t;
+						t.type = "ENDERR"; t.line = line; return t;
 					}
 
 					if (c == '*') {
@@ -123,6 +130,7 @@ Token Scanner::scanToken() {
 					}
 				}
 			} else {
+				stepBack();
 				t.type = "div"; t.line = line; return t;
 			}
 		// quote
@@ -157,7 +165,7 @@ Token Scanner::scanToken() {
 			}
 
 			if (!isdigit(c)) {
-				it--;
+				stepBack();
 				t.type = "number";
 				t.text = text;
 				t.line = line;
@@ -177,7 +185,7 @@ Token Scanner::scanToken() {
 			}
 
 			if (!isalnum(c) && c != '_') {
-				it--;
+				stepBack();
 				if (keywords.find(text) != keywords.end()) {
 					t.type = text; // keyword
 					t.line = line;

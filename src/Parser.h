@@ -1,11 +1,21 @@
 #pragma once
 
+#include <exception>
 #include "Scanner.h"
 #include "ASTnode.h"
 
 class ParserException : public std::exception {
 	public:
-		ParserException(std::string msg) : std::exception(msg.c_str()) {};
+		ParserException(std::string message) {
+			msg = message;
+		};
+
+		virtual const char* what() const throw() {
+			return msg.c_str();
+		}
+
+	private:
+		std::string msg;
 };
 
 class Parser {
