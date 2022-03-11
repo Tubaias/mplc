@@ -6,6 +6,11 @@ Scanner::Scanner(std::vector<char> characters) {
 	keywords = {"var", "for", "end", "in", "do", "read", "print", "int", "string", "bool", "assert", "true", "false"};
 	chars = characters;
 	it = chars.begin();
+	line = 0;
+}
+
+void Scanner::reset() {
+	it = chars.begin();
 }
 
 char Scanner::nextChar() {
@@ -15,6 +20,9 @@ char Scanner::nextChar() {
 
 	char next = *it;
 	it++;
+
+	if (next == 10 /* line feed */) line++;
+
 	return next;
 }
 
@@ -36,63 +44,64 @@ Token Scanner::scanToken() {
 	switch (c) {
 		// single characters
 		case '+':
-			t.type = "add"; return t;
+			t.type = "add"; t.line = line; return t;
 		case '-':
-			t.type = "sub"; return t;
+			t.type = "sub"; t.line = line; return t;
 		case '*':
-			t.type = "mul"; return t;
+			t.type = "mul"; t.line = line; return t;
 		case '(':
-			t.type = "lbrack"; return t;
+			t.type = "lbrack"; t.line = line; return t;
 		case ')':
-			t.type = "rbrack"; return t;
+			t.type = "rbrack"; t.line = line; return t;
 		case ';':
-			t.type = "semicol"; return t;
+			t.type = "semicol"; t.line = line; return t;
 		case '<':
-			t.type = "less"; return t;
+			t.type = "less"; t.line = line; return t;
 		case '=':
-			t.type = "equal"; return t;
+			t.type = "equal"; t.line = line; return t;
 		case '&':
-			t.type = "and"; return t;
+			t.type = "and"; t.line = line; return t;
 		case '!':
-			t.type = "not"; return t;
+			t.type = "not"; t.line = line; return t;
 		// dot
 		case '.':
 			c = nextChar();
 			if (c == 0) {
-				t.type = "ENDERR"; return t;
+				t.type = "ENDERR"; t.line = line; return t;
 			}
 
 			if (c == '.') {
-				t.type = "dots"; return t;
+				t.type = "dots"; t.line = line; return t;
 			} else {
-				t.type = "ERROR";
+				t.type = "INVALID INPUT";
 				t.text = "Unexpected character following '.'";
+				t.line = line;
 				return t;
 			}
 		// colon
 		case ':':
 			c = nextChar();
 			if (c == 0) {
-				t.type = "ENDERR"; return t;
+				t.type = "ENDERR"; t.line = line; return t;
 			}
 
 			if (c == '=') {
-				t.type = "assign"; return t;
+				t.type = "assign"; t.line = line; return t;
 			} else {
-				t.type = "col"; return t;
+				t.type = "col"; t.line = line; return t;
 			}
 		// forward slash
 		case '/':
 			c = nextChar();
 			if (c == 0) {
-				t.type = "ENDERR"; return t;
+				t.type = "ENDERR"; t.line = line; return t;
 			}
 
 			if (c == '/') { // single line comment
 				while (true) {
 					c = nextChar();
 					if (c == 0) {
-						t.type = "END"; return t;
+						t.type = "END"; t.line = line; return t;
 					}
 
 					if (c == 10 /* line feed */) {
@@ -103,7 +112,7 @@ Token Scanner::scanToken() {
 				while (true) {
 					c = nextChar();
 					if (c == 0) {
-						t.type = "END"; return t;
+						t.type = "END"; t.line = line; return t;
 					}
 
 					if (c == '*') {
@@ -114,19 +123,20 @@ Token Scanner::scanToken() {
 					}
 				}
 			} else {
-				t.type = "div"; return t;
+				t.type = "div"; t.line = line; return t;
 			}
 		// quote
 		case '"':
 			while (true) {
 				c = nextChar();
 				if (c == 0) {
-					t.type = "ENDERR"; return t;
+					t.type = "ENDERR"; t.line = line; return t;
 				}
 
 				if (c == '"') {
 					t.type = "text";
 					t.text = text;
+					t.line = line;
 					return t;
 				} else {
 					text.push_back(c);
@@ -143,13 +153,14 @@ Token Scanner::scanToken() {
 
 			c = nextChar();
 			if (c == 0) {
-				t.type = "ENDERR"; return t;
+				t.type = "ENDERR"; t.line = line; return t;
 			}
 
 			if (!isdigit(c)) {
 				it--;
 				t.type = "number";
 				t.text = text;
+				t.line = line;
 				return t;
 			}
 		}
@@ -162,17 +173,19 @@ Token Scanner::scanToken() {
 
 			c = nextChar();
 			if (c == 0) {
-				t.type = "ENDERR"; return t;
+				t.type = "ENDERR"; t.line = line; return t;
 			}
 
 			if (!isalnum(c) && c != '_') {
 				it--;
 				if (keywords.find(text) != keywords.end()) {
 					t.type = text; // keyword
+					t.line = line;
 					return t;
 				} else {
 					t.type = "ident"; // identifier
 					t.text = text;
+					t.line = line;
 					return t;
 				}
 			}

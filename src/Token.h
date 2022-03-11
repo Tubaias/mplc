@@ -3,7 +3,8 @@
 #include <string>
 
 struct Token {
-	std::string type = "";
+	std::string type = ""; // This should be turned into an enum eventually
 	std::string text = "";
-	// add line and col if there's time
+	int line = 0;
+	// add col if there's time
 };
