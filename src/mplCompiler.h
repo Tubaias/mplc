@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <cstring>
 #include "FileReader.h"
 #include "Parser.h"
 #include "SemanticAnalyzer.h"
