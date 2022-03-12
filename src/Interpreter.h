@@ -5,6 +5,20 @@
 #include "struct/ASTnode.h"
 #include "struct/VarItem.h"
 
+class RuntimeException : public std::exception {
+public:
+	RuntimeException(std::string message) {
+		msg = message;
+	};
+
+	virtual const char* what() const throw() {
+		return msg.c_str();
+	}
+
+private:
+	std::string msg;
+};
+
 class Interpreter {
 	public:
 		Interpreter(std::unordered_map<std::string, VarItem>& st);

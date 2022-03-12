@@ -6,12 +6,12 @@ Interpreter::Interpreter(std::unordered_map<std::string, VarItem>& st) {
 
 // interpretation entry point
 void Interpreter::interpret(ASTnode ast) {
-	try {
+	try { // lazy error handling
 		for (ASTnode statement : ast.children) {
 			evalNode(statement);
 		}
 	} catch (std::exception e) {
-		std::cout << "RUNTIME ERROR: " << e.what() << std::endl; // lazy error handling
+		std::cout << "RUNTIME ERROR: " << e.what() << std::endl; 
 	}
 }
 
@@ -88,7 +88,7 @@ void Interpreter::handleLoop(ASTnode node) {
 	}
 }
 
-void Interpreter::handleRead(ASTnode node) {
+void Interpreter::handleRead(ASTnode node) noexcept(false) {
 	std::string identName = node.children.at(0).text;
 
 	std::string input;
@@ -99,7 +99,7 @@ void Interpreter::handleRead(ASTnode node) {
 			int value = std::stoi(input);
 			symbolTable.at(identName).value = std::to_string(value);
 		} catch (std::exception e) {
-			throw std::exception("Could not parse input into integer");
+			throw RuntimeException("Could not parse input into integer");
 		}
 	} else {
 		symbolTable.at(identName).value = input;
