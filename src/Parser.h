@@ -2,7 +2,7 @@
 
 #include <exception>
 #include "Scanner.h"
-#include "ASTnode.h"
+#include "struct/ASTnode.h"
 
 class ParserException : public std::exception {
 	public:

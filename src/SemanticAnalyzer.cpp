@@ -34,6 +34,9 @@ std::unordered_map<std::string, VarItem> SemanticAnalyzer::analyze(ASTnode ast) 
 
 	if (hadError) {
 		printSymboltable();
+		VarItem err;
+		err.type = "error";
+		symboltable[""] = err;
 	}
 
 	return symboltable;
@@ -89,7 +92,7 @@ void SemanticAnalyzer::analyzeNode(ASTnode node) {
 
 		for (int i = 3; i < node.children.size(); i++) {
 			ASTnode child = node.children.at(i);
-			if (child.type == "assign" && child.children.at(0).text == node.children.at(0).text) {
+			if ((child.type == "assign" || child.type == "read") && child.children.at(0).text == node.children.at(0).text) {
 				error(child, "Attempting to assign value to loop control valuable inside loop");
 			}
 		}
@@ -128,7 +131,7 @@ void SemanticAnalyzer::analyzeNode(ASTnode node) {
 		} else {
 			error(node, "Unrecognizable operand type");
 		}
-	} else if (node.type == "sub" || node.type == "mul" || node.type == "div" || node.type == "less") {
+	} else if (node.type == "sub" || node.type == "mul" || node.type == "div") {
 		isNumberType(node.children.at(0));
 		isNumberType(node.children.at(1));
 	} else if (node.type == "and") {
@@ -168,12 +171,6 @@ void SemanticAnalyzer::analyzeNode(ASTnode node) {
 
 	for (ASTnode child : node.children) {
 		analyzeNode(child);
-	}
-}
-
-void SemanticAnalyzer::checkOperCount(ASTnode node, int count) {
-	if (node.children.size() != count) {
-		error(node, "Incorrent number of operands");
 	}
 }
 

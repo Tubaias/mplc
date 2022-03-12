@@ -146,6 +146,20 @@ Token Scanner::scanToken() {
 					t.text = text;
 					t.line = line;
 					return t;
+				} else if (c == 92 /* backslash */) {
+					// handle special characters
+					char c2 = nextChar();
+					if (c2 == 0) {
+						t.type = "ENDERR"; t.line = line; return t;
+					} else if (c2 == 'n') {
+						text.push_back(10); // line feed
+					} else if (c2 == 34 /* quotation mark */) {
+						text.push_back(c2);
+					} else if (c2 == 92 /* backslash */) {
+						text.push_back(c2);
+					} else {
+						stepBack();
+					}
 				} else {
 					text.push_back(c);
 				}

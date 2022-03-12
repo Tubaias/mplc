@@ -3,7 +3,7 @@
 #include <vector>
 #include <iterator>
 #include <set>
-#include "Token.h"
+#include "struct/Token.h"
 
 class Scanner {
 	public:

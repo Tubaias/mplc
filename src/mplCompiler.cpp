@@ -18,16 +18,23 @@ void printAST(ASTnode ast) {
 	for (ASTnode n : ast.children) {
 		printAST(n);
 	}
+
 	std::cout << ")";
 }
 
 int main(int argc, char* argv[]) {
-	std::cout << "Starting.\n" << std::endl;
+	bool verbose = false;
 
 	if (argc < 2) {
 		std::cout << "Missing filename argument." << std::endl;
 		return 1;
+	} else if (argc > 2) {
+		if (std::strcmp(argv[2], "-v") == 0) {
+			verbose = true;
+		}
 	}
+
+	if (verbose) { std::cout << "Starting in verbose mode.\n" << std::endl; }
 
 	// read the file into a char vector
 	std::string filename(argv[1]);
@@ -37,22 +44,41 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	printChars(chars); // EXTRA
+	if (verbose) { printChars(chars); }
 
 	// scanning and parsing
 	Parser parser(chars);
-	//parser.printTokens();
+	if (verbose) {
+		std::cout << "TOKENS:\n";
+		parser.printTokens();
+	}
+	
 	ASTnode ast = parser.parse();
 
-	printAST(ast); // EXTRA
-	std::cout << "\n\n"; // EXTRA
+	if (verbose) {
+		std::cout << "SYNTAX TREE:\n";
+		printAST(ast);
+		std::cout << "\n\n";
+	}
 
 	if (ast.text == "error") {
 		return 0;
 	}
 
+	// semantic analysis
 	SemanticAnalyzer sa;
 	std::unordered_map<std::string, VarItem> symbolTable = sa.analyze(ast);
 
+	if (symbolTable.find("") != symbolTable.end()) {
+		return 0;
+	}
+
+	if (verbose) {
+		std::cout << "OUTPUT:\n";
+	}
+
+	// interpretation
+	Interpreter inter(symbolTable);
+	inter.interpret(ast);
 	return 0;
 }

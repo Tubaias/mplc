@@ -3,8 +3,8 @@
 #include <unordered_map>
 #include <string>
 #include <iostream>
-#include "ASTnode.h"
-#include "VarItem.h"
+#include "struct/ASTnode.h"
+#include "struct/VarItem.h"
 
 class SemanticException : public std::exception {
 public:
@@ -33,7 +33,6 @@ class SemanticAnalyzer {
 		void printSymboltable();
 		void analyzeNode(ASTnode ast);
 
-		void checkOperCount(ASTnode node, int count);
 		void isNumberType(ASTnode node);
 		void isBoolType(ASTnode node);
 		void isStringType(ASTnode node);
