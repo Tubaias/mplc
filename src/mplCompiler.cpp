@@ -41,15 +41,18 @@ int main(int argc, char* argv[]) {
 
 	// scanning and parsing
 	Parser parser(chars);
-	parser.printTokens();
+	//parser.printTokens();
 	ASTnode ast = parser.parse();
 
 	printAST(ast); // EXTRA
-	std::cout << "\n"; // EXTRA
+	std::cout << "\n\n"; // EXTRA
 
 	if (ast.text == "error") {
 		return 0;
 	}
+
+	SemanticAnalyzer sa;
+	std::unordered_map<std::string, VarItem> symbolTable = sa.analyze(ast);
 
 	return 0;
 }

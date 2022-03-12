@@ -29,7 +29,7 @@ void Parser::printTokens() {
 	scanner.reset();
 }
 
-// parse error handling and recovery
+// error handling and recovery
 void Parser::error(Token t, std::string expectation) noexcept(false) {
 	hadError = true;
 
@@ -217,11 +217,13 @@ ASTnode Parser::stmt() {
 	}
 
 	ASTnode node;
+	node.line = current.line;
 	return node;
 }
 
 ASTnode Parser::variable() {
 	ASTnode node;
+	node.line = current.line;
 	node.type = "var";
 
 	match("ident");
@@ -241,6 +243,7 @@ ASTnode Parser::variable() {
 
 ASTnode Parser::type() {
 	ASTnode node;
+	node.line = current.line;
 	node.type = "type";
 	node.text = current.type;
 	return node;
@@ -248,6 +251,7 @@ ASTnode Parser::type() {
 
 ASTnode Parser::assign() {
 	ASTnode node;
+	node.line = current.line;
 	node.type = "assign";
 	node.children.push_back(identifier());
 
@@ -259,6 +263,7 @@ ASTnode Parser::assign() {
 
 ASTnode Parser::loop() {
 	ASTnode node;
+	node.line = current.line;
 	node.type = "loop";
 
 	match("ident");
@@ -284,6 +289,7 @@ ASTnode Parser::loop() {
 
 ASTnode Parser::read() {
 	ASTnode node;
+	node.line = current.line;
 	node.type = "read";
 
 	match("ident");
@@ -293,6 +299,7 @@ ASTnode Parser::read() {
 
 ASTnode Parser::print() {
 	ASTnode node;
+	node.line = current.line;
 	node.type = "print";
 
 	node.children.push_back(expression());
@@ -301,6 +308,7 @@ ASTnode Parser::print() {
 
 ASTnode Parser::assert() {
 	ASTnode node;
+	node.line = current.line;
 	node.type = "assert";
 
 	match("lbrack");
@@ -322,6 +330,7 @@ ASTnode Parser::expression() {
 
 ASTnode Parser::binaryExpr() {
 	ASTnode node;
+	node.line = current.line;
 	node.children.push_back(operand());
 	advance();
 	node.type = current.type;
@@ -333,6 +342,7 @@ ASTnode Parser::binaryExpr() {
 ASTnode Parser::unaryExpr() {
 	if (current.type == "not") {
 		ASTnode node;
+		node.line = current.line;
 		node.type = "not";
 		node.children.push_back(operand());
 		return node;
@@ -343,6 +353,7 @@ ASTnode Parser::unaryExpr() {
 
 ASTnode Parser::operand() {
 	ASTnode node;
+	node.line = current.line;
 
 	if (current.type == "number" || current.type == "text" || current.type == "ident") {
 		node.type = current.type;
@@ -362,6 +373,7 @@ ASTnode Parser::operand() {
 
 ASTnode Parser::identifier() {
 	ASTnode ident;
+	ident.line = current.line;
 	ident.type = "ident";
 	ident.text = current.text;
 	return ident;

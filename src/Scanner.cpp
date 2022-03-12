@@ -199,4 +199,7 @@ Token Scanner::scanToken() {
 			}
 		}
 	}
+
+	t.type = "ERROR";
+	return t;
 }
