@@ -80,5 +80,7 @@ int main(int argc, char* argv[]) {
 	// interpretation
 	Interpreter inter(symbolTable);
 	inter.interpret(ast);
+
+	std::cout << "\n";
 	return 0;
 }
