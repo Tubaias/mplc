@@ -10,8 +10,12 @@ void Interpreter::interpret(ASTnode ast) {
 		for (ASTnode statement : ast.children) {
 			evalNode(statement);
 		}
-	} catch (std::exception e) {
+	} catch (const RuntimeException& e) {
 		std::cout << "RUNTIME ERROR: " << e.what() << std::endl; 
+	} catch (const std::exception& e) {
+		std::cout << "RUNTIME ERROR: " << e.what() << std::endl;
+	} catch (...) {
+		std::cout << "RUNTIME ERROR: unknown" << std::endl;
 	}
 }
 
@@ -98,7 +102,7 @@ void Interpreter::handleRead(ASTnode node) noexcept(false) {
 		try {
 			int value = std::stoi(input);
 			symbolTable.at(identName).value = std::to_string(value);
-		} catch (std::exception e) {
+		} catch (...) {
 			throw RuntimeException("Could not parse input into integer");
 		}
 	} else {
@@ -138,7 +142,11 @@ VarItem Interpreter::evalIntOp(ASTnode node) {
 	} else if (node.type == "mul") {
 		res = val1 * val2;
 	} else {
-		res = val1 / val2;
+		if (val2 == 0) {
+			throw RuntimeException("Divide by zero");
+		} else {
+			res = val1 / val2;
+		}
 	}
 	
 	v.value = std::to_string(res);
