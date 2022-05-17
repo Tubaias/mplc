@@ -1,7 +1,9 @@
 # mplc
 Mini-PL interpreter
 
-Building the CMake project:
+TODO: Replace string jank with enums and some kind of int/string/bool abstraction.
+
+### Building the CMake project:
 ```
 ~/mplc$ mkdir out
 ~/mplc$ cd out
