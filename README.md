@@ -1,7 +1,7 @@
 # mplc
 Mini-PL interpreter
 
-TODO: Replace string jank with enums and some kind of int/string/bool abstraction.
+TODO: Replace string jank with enums and some kind of int/string/bool abstraction, add dedicated error handler class.
 
 ### Building the CMake project:
 ```
